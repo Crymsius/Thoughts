@@ -10,12 +10,11 @@
        
         if (Input.GetKey(KeyCode.LeftShift))
             {
-      //      transform.Translate(fastTranslationX + fastTranslationY, 0, fastTranslationY - fastTranslationX);
+            transform.Translate(fastTranslationX - fastTranslationY, 0, fastTranslationX + fastTranslationY);
             }
         else
             {
             transform.Translate(translationX - translationY, 0, translationX + translationY);
-            //transform.Translate(translationX, translationY, 0);
             }
      
         ////////////////////
