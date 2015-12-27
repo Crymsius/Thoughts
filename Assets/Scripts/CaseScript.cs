@@ -11,6 +11,7 @@ public class CaseScript : MonoBehaviour {
 	private GameObject player;
 
 	private GameObject father;
+	// WARNING : "children" is a bidirectional relation, must be renamed "linked"
 	private Dictionary<string, GameObject> children = new Dictionary<string, GameObject>();
 	private Dictionary<string, GameObject> neighbours = new Dictionary<string, GameObject>();
 
@@ -18,7 +19,9 @@ public class CaseScript : MonoBehaviour {
 	private Transform myPos;
 
 	private string state;
-	private float distance;
+	private float ecartZ;
+	private float distanceZ;
+	private float distanceX;
 	private bool notExpanded = true;
 
 	// Use this for initialization
@@ -34,9 +37,10 @@ public class CaseScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (notExpanded) {
-			distance = (Mathf.Abs (myPos.position.x - posPlayer.position.x)
-				+ Mathf.Abs(myPos.position.z  - posPlayer.position.z))/10;
-			if (distance <= 10) {
+			distanceZ = (Mathf.Abs(myPos.position.z)  - Mathf.Abs(posPlayer.position.z))/10;
+			ecartZ = Mathf.Sign(myPos.position.z*posPlayer.position.z);
+			distanceX = Mathf.Abs(myPos.position.x  - posPlayer.position.x)/10;
+			if (Mathf.Max(distanceX, distanceZ)<=10 && ecartZ>=0) {
 				AutoExpand expandScript = GetComponent<AutoExpand> ();
 				expandScript.expand ();
 				expandScript.enabled = false;
