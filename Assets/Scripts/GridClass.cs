@@ -4,9 +4,10 @@ using System.Collections.Generic;
 
 public class GridClass : MonoBehaviour{
 
-	private Dictionary<int, Dictionary<int, GameObject>> cases = new Dictionary<int, Dictionary<int, GameObject>>();
+	protected Dictionary<int, Dictionary<int, GameObject>> cases { get; set; }
 
 	void Start(){
+		cases = new Dictionary<int, Dictionary<int, GameObject>>();
 	}
 
 	public void SetCase(GameObject aCase, int X, int Z){
@@ -20,7 +21,10 @@ public class GridClass : MonoBehaviour{
 	}
 
 	public bool Exists(int X, int Z){
-		return (cases.ContainsKey (X) && cases [X].ContainsKey (Z));
+		if (cases.ContainsKey (X))
+			return cases [X].ContainsKey (Z);
+		else
+			return false;
 	}
 
 }

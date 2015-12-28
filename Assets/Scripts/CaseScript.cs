@@ -7,17 +7,20 @@ public class CaseScript : MonoBehaviour {
 	public Material Road;
 	public Material Available;
 	public Material Void;
+	public Material Feeling;
+	public Material FeelingAvailable;
 
 	private GameObject player;
 
-	private GameObject father;
+	private GameObject father { get; set; }
 	public GridClass grid { get; private set;}
-	private List<GameObject> neighbours = new List<GameObject>();
+	public Case3 caseV { get; set; }
+	private List<GameObject> neighbours = new List<GameObject> ();
 
 	private Transform posPlayer;
 	private Transform myPos;
 
-	private string state;
+	public string state { get; set;}
 	private bool notExpanded = true;
 
 	// Use this for initialization
@@ -39,9 +42,9 @@ public class CaseScript : MonoBehaviour {
 		if (notExpanded) {
 			float distance = Mathf.Max(Mathf.Abs (myPos.position.x - posPlayer.position.x) / 10,
 				Mathf.Abs(myPos.position.z - posPlayer.position.z) / 10);
-			if (distance<=10) {
+			if (distance<=12) {
 				AutoExpand expandScript = GetComponent<AutoExpand> ();
-				expandScript.expand ();
+				expandScript.expand ("main");
 				expandScript.enabled = false;
 				notExpanded = false;
 			}
@@ -51,43 +54,57 @@ public class CaseScript : MonoBehaviour {
 	}
 
 	void OnMouseDown(){
-		if (state == "Available") {
-			player.GetComponent<Transform> ().position = myPos.position;
-			SelfUpdate ("Road");
-			foreach (GameObject oldNeighbour in father.GetComponent<CaseScript>().GetNeighbours())
-				oldNeighbour.GetComponent<CaseScript> ().SelfUpdate ("Void");
-		}
+		if (state == "Available")
+			GetToRoad ();
 	}
 
-	public void SelfUpdate(string newState){
-		if (state == "Available" && newState == "Void") {
+	public void GetToRoad(){
+		
+		player.GetComponent<Transform> ().position = myPos.position;
+		SelfUpdate ("Road");
+		foreach (GameObject oldNeighbour in father.GetComponent<CaseScript>().GetNeighbours())
+			oldNeighbour.GetComponent<CaseScript> ().SelfUpdate ("Void");
+		caseV.GetComponent<Case3> ().SetPlayer ();
+
+	}
+
+	public void SelfUpdate(string newState){ // to be reorganized & improved
+		if (state != "Road" && newState == "VoidForced") {
 			GetComponent<MeshRenderer> ().material = Void;
-			state = newState;
-		}
-		if (state == "Void" && newState == "Available") {
-			GetComponent<MeshRenderer> ().material = Available;
-			state = newState;
-		} else if (newState == "Road") {
-			GetComponent<MeshRenderer> ().material = Road;
-			state = newState;
-			FindNeighbours ();
-			foreach(GameObject aCase in neighbours) {
-				aCase.GetComponent<CaseScript> ().SelfUpdate ("Available");
-				aCase.GetComponent<CaseScript> ().SetFather (gameObject);
+			state = "Void";
+		} else if (state != "Road") {
+			if (newState == "Void") {
+				if (state == "Available") {
+					GetComponent<MeshRenderer> ().material = Void;
+					state = newState;
+				} else {
+					GetComponent<MeshRenderer> ().material = Feeling;
+					state = "Feeling";
+				}
+			} else if (state == "Available" && newState == "Feeling" 
+				|| state == "Feeling" && newState == "Available") {
+				GetComponent<MeshRenderer> ().material = FeelingAvailable;
+				state = "Feeling Available";
+			} else if (newState == "Available") {
+				GetComponent<MeshRenderer> ().material = Available;
+				state = newState;
+			} else if (newState == "Feeling") {
+				GetComponent<MeshRenderer> ().material = Feeling;
+				state = newState;
+			} else if (newState == "Road") {
+				GetComponent<MeshRenderer> ().material = Road;
+				state = newState;
+				FindNeighbours ();
+				foreach (GameObject aCase in neighbours) {
+					aCase.GetComponent<CaseScript> ().SelfUpdate ("Available");
+					aCase.GetComponent<CaseScript> ().father = gameObject;
+				}
 			}
-		}
+		} 
 	}
 
 	public void wait(){
 		SelfUpdate("Road");
-	}
-
-	public void SetFather(GameObject f){
-		father = f;
-	}
-
-	public GameObject getFather(){
-		return father;
 	}
 		
 	public List<GameObject> GetNeighbours(){
