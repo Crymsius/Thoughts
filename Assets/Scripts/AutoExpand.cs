@@ -23,17 +23,15 @@ public class AutoExpand : MonoBehaviour {
 	}
 
 	public void expand(){
-		foreach (Vector3 vect in expansion) {
-			GameObject newCase = (GameObject)Instantiate (aCase, myPos.localPosition + 10 * vect, myPos.localRotation);
 
-			newCase.transform.parent = GameObject.Find ("Mesh").transform;
-			newCase.GetComponent<AutoExpand> ().removeFromExpansion (-vect);
-
-			newCase.GetComponent<CaseScript>().GetChildren().Add((-vect).ToString(), gameObject);
-			GetComponent<CaseScript> ().GetChildren ().Add (vect.ToString(), newCase);
-
-			newCase.GetComponent<AutoExpand> ().enabled = true;
-
+		Vector3[] array = new Vector3[]{ Vector3.forward, Vector3.back, Vector3.right, Vector3.left };
+		foreach (Vector3 triplet in array) {
+			if(!script.grid.Exists ((int)myPos.position.x / 10 + (int)triplet.x,
+				(int)myPos.position.z/ 10 + (int)triplet.z)){
+				GameObject newCase = (GameObject)Instantiate (aCase, myPos.localPosition + 10 * triplet,
+					myPos.localRotation);
+				newCase.GetComponent<AutoExpand> ().enabled = true;
+			}
 		}
 	}
 

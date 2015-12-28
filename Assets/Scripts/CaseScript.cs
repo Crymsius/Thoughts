@@ -11,17 +11,13 @@ public class CaseScript : MonoBehaviour {
 	private GameObject player;
 
 	private GameObject father;
-	// WARNING : "children" is a bidirectional relation, must be renamed "linked"
-	private Dictionary<string, GameObject> children = new Dictionary<string, GameObject>();
-	private Dictionary<string, GameObject> neighbours = new Dictionary<string, GameObject>();
+	public GridClass grid { get; private set;}
+	private List<GameObject> neighbours = new List<GameObject>();
 
 	private Transform posPlayer;
 	private Transform myPos;
 
 	private string state;
-	private float ecartZ;
-	private float distanceZ;
-	private float distanceX;
 	private bool notExpanded = true;
 
 	// Use this for initialization
@@ -30,6 +26,10 @@ public class CaseScript : MonoBehaviour {
 		posPlayer = (Transform)player.GetComponent<Transform> ();
 		myPos = (Transform)GetComponent<Transform> ();
 
+		grid = GameObject.Find ("Grid").GetComponent<GridClass> ();
+		if (grid.Exists ((int)myPos.position.x / 10, (int)myPos.position.z / 10))
+			Destroy(gameObject);
+		else grid.SetCase (gameObject, (int)myPos.position.x / 10, (int)myPos.position.z / 10);
 		GetComponent<MeshRenderer> ().material = Void;
 		state = "Void";
 	}
@@ -37,10 +37,9 @@ public class CaseScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (notExpanded) {
-			distanceZ = (Mathf.Abs(myPos.position.z)  - Mathf.Abs(posPlayer.position.z))/10;
-			ecartZ = Mathf.Sign(myPos.position.z*posPlayer.position.z);
-			distanceX = Mathf.Abs(myPos.position.x  - posPlayer.position.x)/10;
-			if (Mathf.Max(distanceX, distanceZ)<=10 && ecartZ>=0) {
+			float distance = Mathf.Max(Mathf.Abs (myPos.position.x - posPlayer.position.x) / 10,
+				Mathf.Abs(myPos.position.z - posPlayer.position.z) / 10);
+			if (distance<=10) {
 				AutoExpand expandScript = GetComponent<AutoExpand> ();
 				expandScript.expand ();
 				expandScript.enabled = false;
@@ -53,12 +52,10 @@ public class CaseScript : MonoBehaviour {
 
 	void OnMouseDown(){
 		if (state == "Available") {
-
-			foreach (GameObject oldNeighbour in father.GetComponent<CaseScript>().GetNeighbours().Values)
-				oldNeighbour.GetComponent<CaseScript> ().SelfUpdate ("Void");
-
 			player.GetComponent<Transform> ().position = myPos.position;
 			SelfUpdate ("Road");
+			foreach (GameObject oldNeighbour in father.GetComponent<CaseScript>().GetNeighbours())
+				oldNeighbour.GetComponent<CaseScript> ().SelfUpdate ("Void");
 		}
 	}
 
@@ -74,9 +71,9 @@ public class CaseScript : MonoBehaviour {
 			GetComponent<MeshRenderer> ().material = Road;
 			state = newState;
 			FindNeighbours ();
-			foreach (KeyValuePair<string, GameObject> entry in neighbours) {
-				entry.Value.GetComponent<CaseScript> ().SelfUpdate ("Available");
-				entry.Value.GetComponent<CaseScript> ().SetFather (gameObject);
+			foreach(GameObject aCase in neighbours) {
+				aCase.GetComponent<CaseScript> ().SelfUpdate ("Available");
+				aCase.GetComponent<CaseScript> ().SetFather (gameObject);
 			}
 		}
 	}
@@ -92,57 +89,16 @@ public class CaseScript : MonoBehaviour {
 	public GameObject getFather(){
 		return father;
 	}
-
-	public Dictionary<string, GameObject> GetChildren(){
-		return children;
-	}
-	
-	public Dictionary<string, GameObject> GetNeighbours(){
+		
+	public List<GameObject> GetNeighbours(){
 		return neighbours;
 	}
 
 	public void FindNeighbours(){
-		foreach(KeyValuePair<string, GameObject> entry in children)
-			neighbours.Add (entry.Key, entry.Value);
-		if (neighbours.Count == 2) {
-			string dirFurther, dirBack;
-			if (Mathf.Sign (myPos.position.x) > 0) {
-				dirFurther = Vector3.right.ToString ();
-				dirBack = Vector3.left.ToString ();
-			} else {
-				dirFurther = Vector3.left.ToString ();
-				dirBack = Vector3.right.ToString ();
-			}
-			neighbours.Add (dirFurther, FindNeighboursRecursive (1, myPos.position.z));
-			neighbours.Add (dirBack, FindNeighboursRecursive (-1, myPos.position.z));
-		}
-	}
-
-	public GameObject FindNeighboursRecursive(int further, float z){
-		if (further != 0 && myPos.position.z != 0) {
-			string next;
-			if (Mathf.Sign (z) > 0)
-				next = Vector3.back.ToString ();
-			else
-				next = Vector3.forward.ToString ();
-			return children [next].GetComponent<CaseScript> ().FindNeighboursRecursive (further, z);
-		} else if (further != 0 && myPos.position.z == 0) {
-			string next;
-			if (Mathf.Sign (myPos.position.x)*further == 1)
-				next = Vector3.right.ToString ();
-			else
-				next = Vector3.left.ToString ();
-			return children [next].GetComponent<CaseScript> ().FindNeighboursRecursive (0, z);
-		} else if (further == 0 && myPos.position.z != z) {
-			string next;
-			if (Mathf.Sign (z) < 0)
-				next = Vector3.back.ToString ();
-			else
-				next = Vector3.forward.ToString ();
-			return children [next].GetComponent<CaseScript> ().FindNeighboursRecursive (0, z);
-		} else {
-			return gameObject;
-		}
+		Vector2[] array = new Vector2[]{ Vector2.up, Vector2.down, Vector2.right, Vector2.left };
+		foreach (Vector2 paire in array)
+			neighbours.Add (grid.GetCase ((int)myPos.position.x / 10 + (int)paire.x, 
+				(int)myPos.position.z / 10 + (int)paire.y));
 	}
 
 }
