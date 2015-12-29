@@ -58,13 +58,15 @@ public class CaseScript : MonoBehaviour {
 			GetToRoad ();
 	}
 
-	public void GetToRoad(){
+	public void GetToRoad(){ // corresponds to one move = one time unit
 		
 		player.GetComponent<Transform> ().position = myPos.position;
 		SelfUpdate ("Road");
 		foreach (GameObject oldNeighbour in father.GetComponent<CaseScript>().GetNeighbours())
 			oldNeighbour.GetComponent<CaseScript> ().SelfUpdate ("Void");
 		caseV.GetComponent<Case3> ().SetPlayer ();
+
+		player.GetComponent<PlayerBehaviour> ().Wait (1);
 
 	}
 
