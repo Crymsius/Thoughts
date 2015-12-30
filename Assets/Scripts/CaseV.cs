@@ -37,9 +37,10 @@ public class CaseV : MonoBehaviour {
 				Destroy (gameObject);
 			else
 				myGrid.SetCase (gameObject, (int)myPosition.x, (int)myPosition.z);
-		} else
+		} 
+		else
 			absoluteWeight = Mathf.Pow(width,2)-1;
-		Invoke ("GetMyCases", 1f);
+		Invoke ("GetMyCases", 3/2f);
 	}
 
 	void Update(){

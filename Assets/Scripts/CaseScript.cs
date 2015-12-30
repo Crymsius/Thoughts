@@ -12,6 +12,9 @@ public class CaseScript : MonoBehaviour {
 
 	private GameObject player;
 
+	public GameObject etherSphere;
+	public GameObject myEtherSphere { get; set; }
+
 	private GameObject father { get; set; }
 	public GridClass grid { get; private set;}
 	public CaseV caseV { get; set; }
@@ -61,12 +64,19 @@ public class CaseScript : MonoBehaviour {
 	public void GetToRoad(){ // corresponds to one move = one time unit
 		
 		player.GetComponent<Transform> ().position = myPos.position;
+		player.GetComponent<PlayerBehaviour> ().myRoad.Add (gameObject);
 		SelfUpdate ("Road");
 		foreach (GameObject oldNeighbour in father.GetComponent<CaseScript>().GetNeighbours())
 			oldNeighbour.GetComponent<CaseScript> ().SelfUpdate ("Void");
 		caseV.GetComponent<CaseV> ().SetPlayer ();
 
-		player.GetComponent<PlayerBehaviour> ().Wait (1);
+		myEtherSphere = (GameObject)Instantiate (etherSphere, gameObject.GetComponent<Transform> ().position,
+			gameObject.GetComponent<Transform> ().rotation);
+		myEtherSphere.transform.parent = gameObject.transform;
+		if (player.GetComponent<PlayerBehaviour> ().etherDiscovered)
+			myEtherSphere.SetActive(true);
+
+		player.GetComponent<PlayerBehaviour> ().Wait ();
 
 	}
 
@@ -106,6 +116,7 @@ public class CaseScript : MonoBehaviour {
 	}
 
 	public void wait(){
+		//player.GetComponent<PlayerBehaviour> ().myRoad.Add (gameObject);
 		SelfUpdate("Road");
 	}
 		

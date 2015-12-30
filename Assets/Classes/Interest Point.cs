@@ -34,7 +34,6 @@ public class InterestPoint : MonoBehaviour {
 	void OnMouseDown(){
 		if (caseS.state == "Feeling Available") {
 			// Effets du point d'intérêt à rajouter
-			childPanel.SetActive (false);
 			caseS.GetToRoad();
 			father.SelfDestroy();
 		}
@@ -49,4 +48,9 @@ public class InterestPoint : MonoBehaviour {
 		childPanel.SetActive (false);
 	}
 
+	public void SelfDestroy(){
+		Destroy (childPanel.GetComponentInChildren<Text> ());
+		Destroy (childPanel);
+		Destroy (panelAff);
+	}
 }

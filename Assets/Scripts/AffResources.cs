@@ -18,7 +18,7 @@ public class AffResources : MonoBehaviour {
 	}
 
 	public void MAJResources(){
-		amountRes.text = player.time + "\n\n" + player.ReflexionPoints;
+		amountRes.text = player.time + "\n\n" + player.ReflexionPoints + "\n\n" + player.Ether + " \n";
 	}
 
 }

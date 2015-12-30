@@ -87,8 +87,10 @@ public class Choice : MonoBehaviour {
 	public void SelfDestroy(){
 		foreach (GameObject caseObj in cases) 
 			caseObj.GetComponent<CaseScript> ().SelfUpdate ("VoidForced");
-		foreach (InterestPoint IP in myIPs)
+		foreach (InterestPoint IP in myIPs) {
+			IP.SelfDestroy ();
 			Destroy (IP);
+		}
 
 		GetComponentInParent<ChoicesHandler> ().Invoke ("SetChoice", 0.5f);
 		//SetChoice ();
