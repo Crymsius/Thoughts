@@ -5,13 +5,18 @@ public class ChoicesHandler : MonoBehaviour {
 
 	public GameObject choiceModel;
 
+	public int choiceNum { get; set;}
+
 	// Use this for initialization
 	void Start () {
-		Invoke ("SetFirstChoice", 2f);
+		choiceNum = 0;
+		Invoke ("SetChoice", 2f);
 	}
 
-	public void SetFirstChoice(){
+	public void SetChoice(){
 		GameObject newChoice = Instantiate(choiceModel);
+		newChoice.GetComponent<Choice> ().numChoice = choiceNum;
+		choiceNum++;
 		newChoice.transform.parent = gameObject.transform;
 		newChoice.SetActive (true);
 	}

@@ -14,6 +14,8 @@ public class Choice : MonoBehaviour {
 	private List<GameObject> cases = new List<GameObject>();
 	private List<InterestPoint> myIPs = new List<InterestPoint>();
 
+	public int numChoice { get; set; } 
+
 	// Use this for initialization
 	void Start () {
 		player = GameObject.Find ("Player").GetComponent<PlayerBehaviour> ();
@@ -24,11 +26,13 @@ public class Choice : MonoBehaviour {
 		smallArea = originCase.GetAround ();
 
 		GetSpawn ();
+		int IP = 1;
 
 		foreach (GameObject caseIP in cases) {
 			caseIP.AddComponent<InterestPoint> ();
 			InterestPoint newIP = caseIP.GetComponent<InterestPoint> ();
 			newIP.father = this;
+			newIP.IPnumber = IP; IP++;
 			myIPs.Add(newIP);
 			caseIP.GetComponent<CaseScript> ().SelfUpdate ("Feeling");
 		}
@@ -85,10 +89,8 @@ public class Choice : MonoBehaviour {
 		foreach (InterestPoint IP in myIPs)
 			Destroy (IP);
 
-		GameObject newChoice = Instantiate(choiceModel);
-		newChoice.name = "Choice";
-		newChoice.transform.parent = GameObject.Find("Choices").transform;
-		newChoice.SetActive (true);
+		GetComponentInParent<ChoicesHandler> ().Invoke ("SetChoice", 0.5f);
+		//SetChoice ();
 
 		Destroy (gameObject);
 	}
