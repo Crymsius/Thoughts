@@ -7,8 +7,8 @@ public class Choice : MonoBehaviour {
 	private PlayerBehaviour player;
 
 	public GameObject choiceModel;
-	private Grid3Class grid;
-	private List<Case3> smallArea;
+	private GridVClass grid;
+	private List<CaseV> smallArea;
 
 	private int numberOfIP=3;
 	private List<GameObject> cases = new List<GameObject>();
@@ -19,10 +19,10 @@ public class Choice : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		player = GameObject.Find ("Player").GetComponent<PlayerBehaviour> ();
-		grid = GameObject.Find ("Grid").GetComponent<Grid3Class> ();
+		grid = GameObject.Find ("Grid").GetComponent<GridVClass> ();
 
-		Case3 originCase = grid.GetCase ((int)Mathf.Floor(player.positionV.x),
-			(int)Mathf.Floor(player.positionV.z)).GetComponent<Case3>();
+		CaseV originCase = grid.GetCase ((int)Mathf.Floor(player.positionV.x),
+			(int)Mathf.Floor(player.positionV.z)).GetComponent<CaseV>();
 		smallArea = originCase.GetAround ();
 
 		GetSpawn ();
@@ -45,14 +45,14 @@ public class Choice : MonoBehaviour {
 
 	public void GetSpawn(){
 		
-		Case3[] choices = new Case3[numberOfIP];
-		List<Case3> smallAreaCopy = new List<Case3>(smallArea);
+		CaseV[] choices = new CaseV[numberOfIP];
+		List<CaseV> smallAreaCopy = new List<CaseV>(smallArea);
 
 		for (int i = 0; i < numberOfIP; i++) {
 
 			float sumWeights = 0;
 
-			foreach (Case3 caseV in smallAreaCopy) {
+			foreach (CaseV caseV in smallAreaCopy) {
 				sumWeights += caseV.GetWeight();
 			}
 
@@ -60,7 +60,7 @@ public class Choice : MonoBehaviour {
 			float sumProgress = 0;
 			bool notFound = true;
 
-			foreach (Case3 caseV in smallAreaCopy) {
+			foreach (CaseV caseV in smallAreaCopy) {
 				sumProgress += caseV.GetWeight();
 				if (notFound && sumProgress > roll) {
 					choices [i] = caseV;
@@ -70,11 +70,12 @@ public class Choice : MonoBehaviour {
 			smallAreaCopy.Remove (choices [i]);
 		}
 
-		foreach (Case3 caseV in choices) {
+		foreach (CaseV caseV in choices) {
 			caseV.timesWeight = caseV.timesWeight / 2;
 			bool notFound = true;
 			do {
-				int roll = Random.Range (0, 9);
+				int roll = Random.Range (0, (int)Mathf.Pow(caseV.width,2));
+				//Debug.Log("Roll : " + roll);
 				if (caseV.myCases [roll].GetComponent<CaseScript> ().state != "Road") {
 					notFound = false;
 					cases.Add (caseV.myCases [roll]);

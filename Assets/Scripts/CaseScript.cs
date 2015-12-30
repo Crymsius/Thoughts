@@ -14,7 +14,7 @@ public class CaseScript : MonoBehaviour {
 
 	private GameObject father { get; set; }
 	public GridClass grid { get; private set;}
-	public Case3 caseV { get; set; }
+	public CaseV caseV { get; set; }
 	private List<GameObject> neighbours = new List<GameObject> ();
 
 	private Transform posPlayer;
@@ -42,7 +42,7 @@ public class CaseScript : MonoBehaviour {
 		if (notExpanded) {
 			float distance = Mathf.Max(Mathf.Abs (myPos.position.x - posPlayer.position.x) / 10,
 				Mathf.Abs(myPos.position.z - posPlayer.position.z) / 10);
-			if (distance<=12) {
+			if (distance<=15) {
 				AutoExpand expandScript = GetComponent<AutoExpand> ();
 				expandScript.expand ("main");
 				expandScript.enabled = false;
@@ -64,7 +64,7 @@ public class CaseScript : MonoBehaviour {
 		SelfUpdate ("Road");
 		foreach (GameObject oldNeighbour in father.GetComponent<CaseScript>().GetNeighbours())
 			oldNeighbour.GetComponent<CaseScript> ().SelfUpdate ("Void");
-		caseV.GetComponent<Case3> ().SetPlayer ();
+		caseV.GetComponent<CaseV> ().SetPlayer ();
 
 		player.GetComponent<PlayerBehaviour> ().Wait (1);
 

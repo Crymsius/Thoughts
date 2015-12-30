@@ -9,7 +9,7 @@ public class ChoicesHandler : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		choiceNum = 0;
+		choiceNum = 1;
 		Invoke ("SetChoice", 2f);
 	}
 
@@ -23,7 +23,7 @@ public class ChoicesHandler : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
+		
 	}
 
 }

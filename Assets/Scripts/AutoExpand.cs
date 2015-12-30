@@ -24,7 +24,7 @@ public class AutoExpand : MonoBehaviour {
 			grid = GameObject.Find ("Grid").GetComponent<GridClass> ();
 			ratio = 10;
 		} else {
-			grid = GameObject.Find ("Grid").GetComponent<Grid3Class> ();
+			grid = GameObject.Find ("Grid").GetComponent<GridVClass> ();
 			ratio = 1;
 		}
 
@@ -37,7 +37,7 @@ public class AutoExpand : MonoBehaviour {
 				if (type == "main")
 					newCase.name = "Case";
 				else
-					newCase.name = "Case3";
+					newCase.name = "CaseV";
 				newCase.transform.parent = GameObject.Find ("Grid").transform;
 				newCase.GetComponent<AutoExpand> ().enabled = true;
 			}

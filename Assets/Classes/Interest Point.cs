@@ -21,7 +21,7 @@ public class InterestPoint : MonoBehaviour {
 		panelAff = Instantiate (GameObject.Find ("CanvasCase"));
 		childPanel = panelAff.transform.FindChild("InfoCase").gameObject;
 
-		panelAff.transform.parent = caseS.transform;
+		panelAff.transform.SetParent (caseS.transform);
 		panelAff.transform.localPosition = Vector3.zero;
 
 	}

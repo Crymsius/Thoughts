@@ -2,17 +2,17 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Grid3Class : GridClass {
+public class GridVClass : GridClass {
 
 	private GridClass mainGrid;
-	public GameObject firstCase3;
+	public GameObject firstCaseV;
 
 	// Use this for initialization
 	void Start () {
 		mainGrid = gameObject.GetComponent<GridClass> ();
 		cases = new Dictionary<int, Dictionary<int, GameObject>>();
 
-		SetCase (firstCase3, 0, 0);
+		SetCase (firstCaseV, 0, 0);
 	}
 	
 	// Update is called once per frame
