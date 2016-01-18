@@ -8,10 +8,16 @@ Le script a pour fonction d'animer les tiles composant une case du chemin de pen
 
 var tiles : Transform[];
 var speed : float;
+var speedApp : float;
+var check : int;
+var smoothTime : float;
+private var yVelocity = 0.0;
+private var velocity = Vector3.zero;
 
 function Start () {
 
-		var i = 0;
+	var i = 0;
+	check = 0;
 
 	tiles = new Transform[transform.childCount];
 		for (var t : Transform in transform) {
@@ -21,11 +27,49 @@ function Start () {
 }
 
 function Update () {
-	for (var i = 0; i< 16; i++) {
-		if (!tiles[i].hasChanged) {
-			Oscillate(tiles[i]);
+	if (Input.GetKeyDown ("space")) {
+			Renew();
+		}
+	if (Input.GetKeyDown (KeyCode.P)) {
+		for (var l = 0; l< 16; l++) {
+			Restart(l);
 		}
 	}
+	if (Input.GetKeyDown(KeyCode.N)) {
+		for (var i = 0; i < 16; i++) {
+			if (!tiles[i].hasChanged) {
+				Oscillate(tiles[i]);
+			}
+		}
+		check =1;
+	}
+	if (check) {
+		for (var j = 0; j < 16; j++) {
+			if (!tiles[j].hasChanged) {
+				Oscillate(tiles[j]);
+			}
+		}
+	}
+}
+
+function Renew() {
+	for (var i = 0; i< 16; i++) {
+		tiles[i].position.y = -10;
+		//var pos = Random.value; //position à atteindre	
+		tiles[i].hasChanged = false;
+	}
+}
+
+function Restart(i :int) {
+	var pos = Random.value * 2 - 1; //position à atteindre entre -1 et 1
+	var wait = Random.value*1.5;
+	yield WaitForSeconds (wait);
+	Debug.Log("coucou");
+	while(tiles[i].position.y < pos && tiles[i].position.y<=1) {
+		tiles[i].position = Vector3.SmoothDamp(tiles[i].position, Vector3(tiles[i].position.x, pos, tiles[i].position.z), velocity, smoothTime);
+		yield;
+	}
+	tiles[i].hasChanged = false;	
 }
 
 function Oscillate(tile :Transform) {
