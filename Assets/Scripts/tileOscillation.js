@@ -35,15 +35,7 @@ function Update () {
 			Restart(l);
 		}
 	}
-	if (Input.GetKeyDown(KeyCode.N)) {
-		for (var i = 0; i < 16; i++) {
-			if (!tiles[i].hasChanged) {
-				Oscillate(tiles[i]);
-			}
-		}
-		check =1;
-	}
-	if (check) {
+	if (check==15) {
 		for (var j = 0; j < 16; j++) {
 			if (!tiles[j].hasChanged) {
 				Oscillate(tiles[j]);
@@ -61,15 +53,17 @@ function Renew() {
 }
 
 function Restart(i :int) {
-	var pos = Random.value * 2 - 1; //position à atteindre entre -1 et 1
-	var wait = Random.value*1.5;
+	var pos = Random.value * 2 - 1; // position à atteindre entre -1 et 1
+	var wait = Random.value * 1.5; // attente random avant de monter 
 	yield WaitForSeconds (wait);
-	Debug.Log("coucou");
 	while(tiles[i].position.y < pos && tiles[i].position.y<=1) {
 		tiles[i].position = Vector3.SmoothDamp(tiles[i].position, Vector3(tiles[i].position.x, pos, tiles[i].position.z), velocity, smoothTime);
 		yield;
 	}
-	tiles[i].hasChanged = false;	
+
+	//yield WaitForSeconds ();
+	tiles[i].hasChanged = false;
+	check++;
 }
 
 function Oscillate(tile :Transform) {
