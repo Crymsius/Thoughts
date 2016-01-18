@@ -29,15 +29,18 @@ function Update () {
 }
 
 function Oscillate(tile :Transform) {
-	var pos = Random.value;
-	var amor = Mathf.Abs(pos - Mathf.Abs(tile.position.y));
+	var pos = Random.value; //position à atteindre
+	var amor = Mathf.Abs(pos - Mathf.Abs(tile.position.y)); //amortissement
+	
 	if(tile.position.y <=0) {
-		while(tile.position.y < (pos-0.05)) {
+		//si position actuelle <=0 :
+		while(tile.position.y < (pos)) {
 			tile.Translate(Vector3.up * Time.deltaTime * speed);
 			yield;
 		}
 	} else {
-		while(tile.position.y > (-pos+0.05)) {
+		// si position actuelle > 0
+		while(tile.position.y > (-pos)) {
 			tile.Translate(Vector3.down * Time.deltaTime * speed);
 			yield;
 		}
