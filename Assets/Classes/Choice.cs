@@ -32,6 +32,11 @@ public class Choice : MonoBehaviour {
 			caseIP.AddComponent<InterestPoint> ();
 			InterestPoint newIP = caseIP.GetComponent<InterestPoint> ();
 			newIP.father = this;
+
+			newIP.cost = 100 * (IP - 1);
+			if (IP==3) newIP.etherCost = 50 ;
+			// Just for testing, the cost needs to be loaded from external file
+
 			newIP.IPnumber = IP; IP++;
 			myIPs.Add(newIP);
 			caseIP.GetComponent<CaseScript> ().SelfUpdate ("Feeling");

@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
 public class PlayerBehaviour : MonoBehaviour {
 
 	public AffResources printer;
+	public AffResources infoText;
 
 	public Transform position { get; private set;}
 	public Vector3 positionV { get; set; }
@@ -24,6 +26,7 @@ public class PlayerBehaviour : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		printer = GameObject.Find ("InfoResources").GetComponent<AffResources> ();
+		infoText = GameObject.Find ("InfoActions").GetComponent<AffResources> ();
 
 		position = (Transform)GetComponent<Transform> ();
 		positionV = Vector3.zero;

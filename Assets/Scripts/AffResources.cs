@@ -21,4 +21,14 @@ public class AffResources : MonoBehaviour {
 		amountRes.text = player.time + "\n\n" + player.ReflexionPoints + "\n\n" + player.Ether + " \n";
 	}
 
+	public IEnumerator PrintMessage(string type){
+		if (type == "NotEnoughPR") {
+			amountRes.text += "You don't have enough Reflexion Points to discover that thought\n";
+		} else if (type == "NotEnoughEther") {
+			amountRes.text += "You don't have enough Ether to discover that thought\n";
+		}
+		yield return new WaitForSeconds(2.0F);
+		amountRes.text = "";
+	}
+
 }

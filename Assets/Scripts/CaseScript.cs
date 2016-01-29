@@ -93,8 +93,8 @@ public class CaseScript : MonoBehaviour {
 					GetComponent<MeshRenderer> ().material = Feeling;
 					state = "Feeling";
 				}
-			} else if (state == "Available" && newState == "Feeling" 
-				|| state == "Feeling" && newState == "Available") {
+			} else if (state == "Available" && newState == "Feeling"
+			           || state == "Feeling" && newState == "Available") {
 				GetComponent<MeshRenderer> ().material = FeelingAvailable;
 				state = "Feeling Available";
 			} else if (newState == "Available") {
