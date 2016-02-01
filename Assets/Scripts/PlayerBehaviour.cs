@@ -5,6 +5,8 @@ using System.Collections.Generic;
 
 public class PlayerBehaviour : MonoBehaviour {
 
+	public static PlayerBehaviour Instance;
+
 	public AffResources printer;
 	public AffResources infoText;
 
@@ -23,8 +25,22 @@ public class PlayerBehaviour : MonoBehaviour {
 
 	public bool etherDiscovered = false;
 
+	void Awake ()   
+	{
+		if (Instance == null)
+		{
+			DontDestroyOnLoad(gameObject);
+			Instance = this;
+		}
+		else if (Instance != this)
+		{
+			Destroy (gameObject);
+		}
+	}
+
 	// Use this for initialization
 	void Start () {
+
 		printer = GameObject.Find ("InfoResources").GetComponent<AffResources> ();
 		infoText = GameObject.Find ("InfoActions").GetComponent<AffResources> ();
 
@@ -35,6 +51,7 @@ public class PlayerBehaviour : MonoBehaviour {
 		RPperTime = 0;
 		Ether = 0;
 		etherEvapRate = 1f / 10;
+
 	}
 	
 	// Update is called once per frame
@@ -60,4 +77,5 @@ public class PlayerBehaviour : MonoBehaviour {
 
 		printer.MAJResources ();
 	}
+
 }
