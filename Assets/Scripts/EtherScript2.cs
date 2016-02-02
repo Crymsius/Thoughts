@@ -3,10 +3,9 @@ using System.Collections;
 
 public class EtherScript2 : MonoBehaviour {
 
-	public Animator animator;
+	//public Animator animator;
 	public Transform sphere;
 	public GameObject player;
-	public SpriteRenderer spriteRenderer;
 
 	public int amountMax { get; set;}
 	public int amount { get; set;}
@@ -19,7 +18,7 @@ public class EtherScript2 : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		animator = GameObject.Find("EtherSprite").GetComponent<Animator>();
+		//animator = GameObject.Find("EtherSprite").GetComponent<Animator>();
 
 		amountMax = 10;
 		amount = 0;
@@ -36,12 +35,11 @@ public class EtherScript2 : MonoBehaviour {
 
 	public IEnumerator MAJ(){
 		
-		if (amount > 0 && Random.Range (0f, 1f) < growthRate)
+		if (amount > 0 && Random.Range (0f, 1f) < growthRate) {
 			amount ++;
+		}
 		else if (amount == 0 && Random.Range (0f, 1f) < appearanceRate){ //apparition
 			amount ++;
-			animator.SetInteger("Ether", amount);
-			spriteRenderer.enabled=true;
 		}
 		
 		
@@ -51,7 +49,7 @@ public class EtherScript2 : MonoBehaviour {
 		if (Random.Range (0f, 1f) < (float)amount / amountMax * unstability)
 			amount = 0;
 
-		animator.SetInteger("Ether", amount);
+		GetComponentInChildren<EtherSpriteController> ().MajAmount(amount);
 		Invoke ("MAJproperties", 1 / 10f);
 
 		//MAJproperties ();
@@ -66,6 +64,7 @@ public class EtherScript2 : MonoBehaviour {
 	public void PreMAJproperties(){
 		player.GetComponent<PlayerBehaviour> ().Ether += amount;
 		player.GetComponent<PlayerBehaviour> ().printer.MAJResources ();
+		GetComponentInChildren<EtherSpriteController> ().Vanish();
 		amount = 0;
 		MAJproperties ();
 	}
