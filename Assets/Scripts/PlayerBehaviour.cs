@@ -11,6 +11,8 @@ public class PlayerBehaviour : MonoBehaviour {
 	public AffResources infoText;
 
 	public Transform position { get; private set;}
+	public Vector3 etherealPosition { get; set;}
+	public Vector3 physicalPosition { get; set;}
 	public Vector3 positionV { get; set; }
 
 	public List<GameObject> myRoad = new List<GameObject>();
@@ -46,6 +48,8 @@ public class PlayerBehaviour : MonoBehaviour {
 
 		position = (Transform)GetComponent<Transform> ();
 		positionV = Vector3.zero;
+		etherealPosition = Vector3.zero;
+		physicalPosition = Vector3.zero;
 
 		ReflexionPoints = 0;
 		RPperTime = 0;
@@ -62,6 +66,11 @@ public class PlayerBehaviour : MonoBehaviour {
 			etherDiscovered = true;
 			foreach (GameObject caseObj in myRoad)
 				caseObj.GetComponent<CaseScript>().myEtherSphere.SetActive (true);
+		}
+		// Hack, to be removed when released
+		if (Input.GetKeyDown (KeyCode.I)) { 
+			ReflexionPoints += 100000;
+			Ether += 100000;
 		}
 	}
 

@@ -14,6 +14,7 @@ public class CaseScript : MonoBehaviour {
 
 	public GameObject etherSphere;
 	public GameObject myEtherSphere { get; set; }
+	public GameObject attachedObject { get; set;} // Careful
 
 	private GameObject father { get; set; }
 	public GridClass grid { get; private set;}
@@ -64,6 +65,7 @@ public class CaseScript : MonoBehaviour {
 	public void GetToRoad(){ // corresponds to one move = one time unit
 		
 		player.GetComponent<Transform> ().position = myPos.position;
+		player.GetComponent<PlayerBehaviour> ().etherealPosition = myPos.position / 10;
 		player.GetComponent<PlayerBehaviour> ().myRoad.Add (gameObject);
 		SelfUpdate ("Road");
 		foreach (GameObject oldNeighbour in father.GetComponent<CaseScript>().GetNeighbours())

@@ -6,7 +6,7 @@ public class GridClass : MonoBehaviour{
 
 	protected Dictionary<int, Dictionary<int, GameObject>> cases { get; set; }
 
-	void Start(){
+	void Awake(){
 		cases = new Dictionary<int, Dictionary<int, GameObject>>();
 	}
 
