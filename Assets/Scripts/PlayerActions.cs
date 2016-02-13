@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class PlayerActions : MonoBehaviour {
@@ -19,6 +20,7 @@ public class PlayerActions : MonoBehaviour {
 	}
 
 	public void makeNewBridge(){
+		playerStats.numberBridges++;
 		Bridge B1 = newBridge ("Ethereal");
 		Bridge B2 = newBridge ("Physical");
 		B1.linkedBridge = B2; B2.linkedBridge = B1;
@@ -28,6 +30,8 @@ public class PlayerActions : MonoBehaviour {
 		GameObject newBridge = (GameObject)Instantiate (originalBridge);
 		newBridge.SetActive (true);
 		newBridge.name = "Bridge";
+
+		newBridge.GetComponent<Bridge> ().number = playerStats.numberBridges;
 
 		if (type == "Ethereal") {
 			newBridge.GetComponent<PositionHandler> ().myGridHandler = 

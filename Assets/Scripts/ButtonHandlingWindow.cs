@@ -15,6 +15,10 @@ public class ButtonHandlingWindow : MonoBehaviour {
 		
 	}
 
+	void OnMouseDown(){
+		ActiveGoal ();
+	}
+
 	public void ActiveGoal(){
 		cible.SetActive (!cible.activeSelf);
 	}

@@ -7,6 +7,8 @@ public class PlayerBehaviour : MonoBehaviour {
 
 	public static PlayerBehaviour Instance;
 
+	public GameObject investor;
+
 	public AffResources printer;
 	public AffResources infoText;
 
@@ -26,6 +28,7 @@ public class PlayerBehaviour : MonoBehaviour {
 	public float etherEvapRate { get; set; }
 
 	public bool etherDiscovered = false;
+	public int numberBridges { get; set;}
 
 	void Awake ()   
 	{
@@ -56,6 +59,7 @@ public class PlayerBehaviour : MonoBehaviour {
 		Ether = 0;
 		etherEvapRate = 1f / 10;
 
+		numberBridges = 0;
 	}
 	
 	// Update is called once per frame
@@ -85,6 +89,7 @@ public class PlayerBehaviour : MonoBehaviour {
 		}
 
 		printer.MAJResources ();
+		investor.GetComponent<Investor> ().MAJ ();
 	}
 
 }

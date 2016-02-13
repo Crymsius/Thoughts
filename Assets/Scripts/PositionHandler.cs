@@ -24,13 +24,13 @@ public class PositionHandler : MonoBehaviour {
 
 	//May be improvable
 	public void SetEtherealPosition(Vector3 pos){
-		myPos.position = 10*pos;
+		myPos.position += 10*pos;
 		myObject.transform.parent = myGridHandler.GetCase ((int)pos.x, (int)pos.z).transform;
 		myGridHandler.GetCase ((int)pos.x, (int)pos.z).GetComponent<CaseScript> ().attachedObject = myObject;
 	}
 
 	public void SetPhysicalPosition(Vector3 pos){
-		myPos.position = 10*pos;
+		myPos.position += 10*pos;
 		myObject.transform.parent = myGridHandler.GetCase ((int)pos.x, (int)pos.z).transform;
 		myGridHandler.GetCase ((int)pos.x, (int)pos.z).GetComponent<RealCase> ().attachedObject = myObject;
 	}
