@@ -2172,13 +2172,9 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children: []
-<<<<<<< HEAD:Assets/Scenes/MainScene.unity
-  m_Father: {fileID: 1472320617}
-  m_RootOrder: 3
-=======
+
   m_Father: {fileID: 860207926}
   m_RootOrder: 0
->>>>>>> feature/Sprites:Assets/Scene1.unity
 --- !u!114 &1359637974
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2354,12 +2350,7 @@ Transform:
   - {fileID: 823351269}
   - {fileID: 301249808}
   - {fileID: 885978704}
-<<<<<<< HEAD:Assets/Scenes/MainScene.unity
-  - {fileID: 1359637973}
-  - {fileID: 936473460}
-=======
   - {fileID: 860207926}
->>>>>>> feature/Sprites:Assets/Scene1.unity
   m_Father: {fileID: 0}
   m_RootOrder: 5
 --- !u!1 &1703571206
