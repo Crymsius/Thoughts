@@ -12,9 +12,8 @@ public class CaseScript : MonoBehaviour {
 
 	private GameObject player;
 
-	public GameObject etherSphere;
-	public GameObject myEtherSphere { get; set; }
-	public GameObject attachedObject { get; set;} // Careful
+	public GameObject ether;
+	public GameObject myEther { get; set; }
 
 	private GameObject father { get; set; }
 	public GridClass grid { get; private set;}
@@ -71,12 +70,20 @@ public class CaseScript : MonoBehaviour {
 		foreach (GameObject oldNeighbour in father.GetComponent<CaseScript>().GetNeighbours())
 			oldNeighbour.GetComponent<CaseScript> ().SelfUpdate ("Void");
 		caseV.GetComponent<CaseV> ().SetPlayer ();
-
+		
+		/*
 		myEtherSphere = (GameObject)Instantiate (etherSphere, gameObject.GetComponent<Transform> ().position,
 			gameObject.GetComponent<Transform> ().rotation);
 		myEtherSphere.transform.parent = gameObject.transform;
 		if (player.GetComponent<PlayerBehaviour> ().etherDiscovered)
 			myEtherSphere.SetActive(true);
+		*/
+		
+		myEther = (GameObject)Instantiate(ether, gameObject.GetComponent<Transform> ().position,
+			gameObject.GetComponent<Transform> ().rotation);
+		myEther.transform.parent = gameObject.transform;
+		if (player.GetComponent<PlayerBehaviour> ().etherDiscovered)
+			myEther.SetActive(true);
 
 		player.GetComponent<PlayerBehaviour> ().Wait ();
 

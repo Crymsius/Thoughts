@@ -65,7 +65,7 @@ public class PlayerBehaviour : MonoBehaviour {
 		if (!etherDiscovered && Input.GetKeyDown (KeyCode.E)) {
 			etherDiscovered = true;
 			foreach (GameObject caseObj in myRoad)
-				caseObj.GetComponent<CaseScript>().myEtherSphere.SetActive (true);
+				caseObj.GetComponent<CaseScript>().myEther.SetActive (true);
 		}
 		// Hack, to be removed when released
 		if (Input.GetKeyDown (KeyCode.I)) { 
@@ -80,7 +80,7 @@ public class PlayerBehaviour : MonoBehaviour {
 
 		if (etherDiscovered) {
 			foreach (GameObject caseObj in myRoad) 
-				StartCoroutine (caseObj.GetComponentInChildren<EtherScript> ().MAJ ());
+				StartCoroutine (caseObj.GetComponentInChildren<EtherScript2> ().MAJ ());
 			Ether -= (int)Mathf.Floor (Random.Range ( 0.75f * Ether * etherEvapRate ,1.25f * Ether * etherEvapRate));
 		}
 
