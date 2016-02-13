@@ -25,10 +25,11 @@ public class VisualHandler : MonoBehaviour {
 			switchButton.SetActive (!switchButton.activeSelf);
 	}
 
-	public void OpenObjectInfo(string name, string text, bool needInvestor, string resource){
+	public void OpenObjectInfo(GameObject selectedObject ,string name, string text, bool needInvestor, string resource){
+		investor.GetComponent<Investor> ().selected = selectedObject;
 		nameText.text = name;
 		infoText.text = text;
-		investor.GetComponent<Investor> ().SetActive (needInvestor, resource);
+		investor.GetComponent<Investor> ().SetActive (needInvestor, resource, text);
 	}
 
 }

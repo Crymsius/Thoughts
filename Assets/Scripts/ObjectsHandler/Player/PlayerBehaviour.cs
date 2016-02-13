@@ -75,6 +75,7 @@ public class PlayerBehaviour : MonoBehaviour {
 		if (Input.GetKeyDown (KeyCode.I)) { 
 			ReflexionPoints += 100000;
 			Ether += 100000;
+			MAJResources ();
 		}
 	}
 
@@ -88,8 +89,12 @@ public class PlayerBehaviour : MonoBehaviour {
 			Ether -= (int)Mathf.Floor (Random.Range ( 0.75f * Ether * etherEvapRate ,1.25f * Ether * etherEvapRate));
 		}
 
-		printer.MAJResources ();
+		MAJResources ();
 		investor.GetComponent<Investor> ().MAJ ();
+	}
+
+	public void MAJResources(){
+		printer.MAJResources ();
 	}
 
 }
