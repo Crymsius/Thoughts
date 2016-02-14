@@ -39,8 +39,8 @@ public class InterestPoint : MonoBehaviour {
 	}
 
 	void OnMouseDown(){
-		if (caseS.state == "Feeling Available") {
-			
+		// if (caseS.state == "Feeling Available") {
+		if (caseS.animator.GetBool("isAvailable")) {
 			if (player.ReflexionPoints >= cost && player.Ether >= etherCost) {
 				player.ReflexionPoints -= cost;
 				// Effets du point d'intérêt à rajouter

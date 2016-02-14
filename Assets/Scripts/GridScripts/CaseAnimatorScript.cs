@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class EtherSpriteController : MonoBehaviour {
+public class CaseAnimatorScript : MonoBehaviour {
 
 	public Animator animator;
 
@@ -13,13 +13,5 @@ public class EtherSpriteController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 	
-	}
-
-	public void MajAmount(int amount) {
-		animator.SetInteger("Ether", amount);
-	}
-
-	public void Vanish() {
-		animator.SetInteger("Ether", 0);
 	}
 }

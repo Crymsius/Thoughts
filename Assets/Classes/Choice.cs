@@ -81,7 +81,7 @@ public class Choice : MonoBehaviour {
 			do {
 				int roll = Random.Range (0, (int)Mathf.Pow(caseV.width,2));
 				//Debug.Log("Roll : " + roll);
-				if (caseV.myCases [roll].GetComponent<CaseScript> ().state != "Road") {
+				if (caseV.myCases [roll].GetComponent<CaseScript> ().animator.GetBool("isRoad") == false) {
 					notFound = false;
 					cases.Add (caseV.myCases [roll]);
 				}
@@ -91,7 +91,7 @@ public class Choice : MonoBehaviour {
 
 	public void SelfDestroy(){
 		foreach (GameObject caseObj in cases) 
-			caseObj.GetComponent<CaseScript> ().SelfUpdate ("VoidForced");
+			caseObj.GetComponent<CaseScript> ().SelfUpdate ("Void");
 		foreach (InterestPoint IP in myIPs) {
 			IP.SelfDestroy ();
 			Destroy (IP);
