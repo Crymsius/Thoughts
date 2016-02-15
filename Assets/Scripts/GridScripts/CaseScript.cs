@@ -10,6 +10,8 @@ public class CaseScript : MonoBehaviour {
 	public Material Feeling;
 	public Material FeelingAvailable;
 
+	public Animator animator;
+
 	private GameObject player;
 
 	public GameObject ether;
@@ -24,8 +26,9 @@ public class CaseScript : MonoBehaviour {
 
 	private Transform posPlayer;
 	private Transform myPos;
+	public bool fini = false;
 
-	public string state { get; set;}
+	// public string state { get; set;}
 	private bool notExpanded = true;
 
 	// Use this for initialization
@@ -34,12 +37,14 @@ public class CaseScript : MonoBehaviour {
 		posPlayer = (Transform)player.GetComponent<Transform> ();
 		myPos = (Transform)GetComponent<Transform> ();
 
+		animator = GetComponent<Animator>();
+
 		grid = GameObject.Find ("Grid").GetComponent<GridClass> ();
 		if (grid.Exists ((int)myPos.position.x / 10, (int)myPos.position.z / 10))
 			Destroy(gameObject);
 		else grid.SetCase (gameObject, (int)myPos.position.x / 10, (int)myPos.position.z / 10);
 		GetComponent<MeshRenderer> ().material = Void;
-		state = "Void";
+		animator.SetBool("isVoid", true);
 	}
 
 	// Update is called once per frame
@@ -59,8 +64,10 @@ public class CaseScript : MonoBehaviour {
 	}
 
 	void OnMouseDown(){
-		if (state == "Available")
-			GetToRoad ();
+		if (animator.GetBool("isAvailable") && animator.GetBool("isChoice")) {
+		} else if (animator.GetBool("isAvailable") && !animator.GetBool("isChoice")) {
+			GetToRoad();
+		}
 	}
 
 	public void GetToRoad(){ // corresponds to one move = one time unit
@@ -83,39 +90,91 @@ public class CaseScript : MonoBehaviour {
 
 	}
 
+	// public void SelfUpdate(string newState){ // to be reorganized & improved
+	// 	if (state != "Road" && newState == "VoidForced") {
+	// 		GetComponent<MeshRenderer> ().material = Void;
+	// 		state = "Void";
+	// 	} else if (state != "Road") {
+	// 		if (newState == "Void") {
+	// 			if (state == "Available") {
+	// 				GetComponent<MeshRenderer> ().material = Void;
+	// 				state = newState;
+	// 			} else {
+	// 				GetComponent<MeshRenderer> ().material = Feeling;
+	// 				state = "Feeling";
+	// 			}
+	// 		} else if (state == "Available" && newState == "Feeling"
+	// 		           || state == "Feeling" && newState == "Available") {
+	// 			GetComponent<MeshRenderer> ().material = FeelingAvailable;
+	// 			state = "Feeling Available";
+	// 		} else if (newState == "Available") {
+	// 			GetComponent<MeshRenderer> ().material = Available;
+	// 			state = newState;
+	// 		} else if (newState == "Feeling") {
+	// 			GetComponent<MeshRenderer> ().material = Feeling;
+	// 			state = newState;
+	// 		} else if (newState == "Road") {
+	// 			GetComponent<MeshRenderer> ().material = Road;
+	// 			state = newState;
+	// 			FindNeighbours ();
+	// 			foreach (GameObject aCase in neighbours) {
+	// 				aCase.GetComponent<CaseScript> ().SelfUpdate ("Available");
+	// 				aCase.GetComponent<CaseScript> ().father = gameObject;
+	// 			}
+	// 		}
+	// 	}
+	// }
+
 	public void SelfUpdate(string newState){ // to be reorganized & improved
-		if (state != "Road" && newState == "VoidForced") {
-			GetComponent<MeshRenderer> ().material = Void;
-			state = "Void";
-		} else if (state != "Road") {
-			if (newState == "Void") {
-				if (state == "Available") {
-					GetComponent<MeshRenderer> ().material = Void;
-					state = newState;
+		
+		switch(newState) {
+
+			case "Void":
+				if (animator.GetBool("isChoice") && animator.GetBool("isAvailable")){
+					animator.SetBool("isChoice", true);
+					animator.SetBool("isAvailable", false);
 				} else {
-					GetComponent<MeshRenderer> ().material = Feeling;
-					state = "Feeling";
+					animator.SetBool("isVoid", true);
+					animator.SetBool("isChoice", false);
+					animator.SetBool("isAvailable", false);
 				}
-			} else if (state == "Available" && newState == "Feeling"
-			           || state == "Feeling" && newState == "Available") {
-				GetComponent<MeshRenderer> ().material = FeelingAvailable;
-				state = "Feeling Available";
-			} else if (newState == "Available") {
-				GetComponent<MeshRenderer> ().material = Available;
-				state = newState;
-			} else if (newState == "Feeling") {
-				GetComponent<MeshRenderer> ().material = Feeling;
-				state = newState;
-			} else if (newState == "Road") {
-				GetComponent<MeshRenderer> ().material = Road;
-				state = newState;
+				break;
+			case "Available":
+				if(!animator.GetBool("isRoad")) {
+					animator.SetBool("isVoid", false);
+					animator.SetBool("isAvailable", true);
+				}
+				break;
+			case "Feeling":
+				animator.SetBool("isVoid", false);
+				animator.SetBool("isChoice", true);
+				break;
+			case "Road":
+				animator.SetBool("isRoad", true);
+				animator.SetBool("isChoice", false);
+				animator.SetBool("isAvailable", false);
+				// state = "Road";
 				FindNeighbours ();
 				foreach (GameObject aCase in neighbours) {
 					aCase.GetComponent<CaseScript> ().SelfUpdate ("Available");
 					aCase.GetComponent<CaseScript> ().father = gameObject;
 				}
-			}
-		} 
+				break;
+			case "VoidForced":
+				animator.SetBool("isVoid", true);
+				// animator.SetBool("isRoad", false);
+				// animator.SetBool("isChoice", false);
+				// animator.SetBool("isAvailable", false);
+				// state = "Void";
+				break;
+			// default:
+			// 	animator.SetBool("isVoid", true);
+			// 	animator.SetBool("isRoad", false);
+			// 	animator.SetBool("isChoice", false);
+			// 	animator.SetBool("isAvailable", false);
+			// 	state="Void";
+			// 	break;
+		}
 	}
 
 	public void wait(){
