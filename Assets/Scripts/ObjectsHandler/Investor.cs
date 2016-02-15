@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Investor : MonoBehaviour {
 
@@ -8,6 +9,7 @@ public class Investor : MonoBehaviour {
 	public GameObject inputAmount;
 	public GameObject infoInvestment;
 
+	public Dictionary<string, string> infos;
 	public GameObject textInfo;
 	public string textBasic;
 	public string textBonus;
@@ -33,17 +35,23 @@ public class Investor : MonoBehaviour {
 	void Update () {
 	}
 
-	public void SetActive(bool activated, string resourceInvested, string textToprint){
-		active = activated;
+	public void SetActive(Dictionary<string, string> received){
+		infos = received;
+
+		if (infos ["investor"] == "yes")
+			active = true;
+		else
+			active = false;
+		
 		foreach (Transform child in transform)
 		{
-			child.gameObject.SetActive (activated);
+			child.gameObject.SetActive (active);
 		}
-		if (activated) {
-			textBasic = textToprint;
-			resource = resourceInvested;
-			MAJ ();
-		}
+
+		textBasic = infos["text"];
+		resource = infos["resource"];
+		MAJ ();
+
 	}
 
 	public void GetInput(){
@@ -57,28 +65,29 @@ public class Investor : MonoBehaviour {
 	}
 
 	public void MAJ(){
-		if (active) {
+		if (selected!=null) {
 			if (resource == "ether") {
 				distanceToSelected = Vector3.Distance(playerStats.position.position,selected.GetComponent<Bridge> ().position)/10;
 				amountMax = playerStats.Ether;
 				amountMaxToInvest = (int)((float)amountMax / Mathf.Pow (1.015f, distanceToSelected));
+				textBonus = "\n\nEther stocked : " + selected.GetComponent<Bridge> ().etherStock;
+				textInfo.GetComponent<Text> ().text = textBasic + textBonus;
 			}
+			if (active) {
+				if (presentInvestment > amountMaxToInvest)
+					presentInvestment = amountMaxToInvest;
 			
-			if (presentInvestment > amountMaxToInvest)
-				presentInvestment = amountMaxToInvest;
-			
-			inputAmount.GetComponent<InputField> ().text = presentInvestment.ToString ();
-			infoInvestment.GetComponent<Text> ().text = "Total cost : " +
+				inputAmount.GetComponent<InputField> ().text = presentInvestment.ToString ();
+				infoInvestment.GetComponent<Text> ().text = "Total cost : " +
 				(int)(presentInvestment * Mathf.Pow (1.015f, distanceToSelected));
+			}
 		}
 	}
 
 	public void invest(){
-		playerStats.Ether-=(int)(presentInvestment * Mathf.Pow (1.015f, distanceToSelected));
 		if (resource == "ether") {
-			selected.GetComponent<Bridge> ().etherStock += presentInvestment;
-			textBonus = "\n\nEther stocked : " + selected.GetComponent<Bridge> ().etherStock;
-			textInfo.GetComponent<Text> ().text = textBasic + textBonus;
+			playerStats.Ether-=(int)(presentInvestment * Mathf.Pow (1.015f, distanceToSelected));
+			selected.GetComponent<Bridge> ().addEther(presentInvestment);
 		}
 		playerStats.MAJResources ();
 		MAJ ();

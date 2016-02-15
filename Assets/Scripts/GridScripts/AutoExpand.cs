@@ -23,6 +23,9 @@ public class AutoExpand : MonoBehaviour {
 		if (type == "main") {
 			grid = GameObject.Find ("Grid").GetComponent<GridClass> ();
 			ratio = 10;
+		} else if (type == "real") {
+			grid = GameObject.Find ("RealGrid").GetComponent<GridClass> ();
+			ratio = 10;
 		} else {
 			grid = GameObject.Find ("Grid").GetComponent<GridVClass> ();
 			ratio = 1;
@@ -34,11 +37,16 @@ public class AutoExpand : MonoBehaviour {
 				(int)myPos.position.z/ ratio + (int)triplet.z)){
 				GameObject newCase = (GameObject)Instantiate (aCase, myPos.localPosition + ratio * triplet,
 					myPos.localRotation);
-				if (type == "main")
+				if (type == "main") {
 					newCase.name = "Case";
-				else
+					newCase.transform.parent = GameObject.Find ("Grid").transform;
+				} else if (type == "real") {
+					newCase.name = "realCase";
+					newCase.transform.parent = GameObject.Find ("RealGrid").transform;
+				} else {
 					newCase.name = "CaseV";
-				newCase.transform.parent = GameObject.Find ("Grid").transform;
+					newCase.transform.parent = GameObject.Find ("Grid").transform;
+				}
 				newCase.GetComponent<AutoExpand> ().enabled = true;
 			}
 		}

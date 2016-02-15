@@ -1,12 +1,17 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 public class VisualHandler : MonoBehaviour {
 
 	public GameObject switchButton;
 	public GameObject panelInfo;
 	public GameObject investor;
+	public GameObject specialButton;
+	public GameObject temporaryButton { get; set;}
+
+	public GameObject AttachableScripts;
 
 	public Text nameText { get; set;}
 	public Text infoText { get; set;}
@@ -25,11 +30,24 @@ public class VisualHandler : MonoBehaviour {
 			switchButton.SetActive (!switchButton.activeSelf);
 	}
 
-	public void OpenObjectInfo(GameObject selectedObject ,string name, string text, bool needInvestor, string resource){
+	public void OpenObjectInfo(GameObject selectedObject ,Dictionary<string, string> infos){
+
 		investor.GetComponent<Investor> ().selected = selectedObject;
-		nameText.text = name;
-		infoText.text = text;
-		investor.GetComponent<Investor> ().SetActive (needInvestor, resource, text);
+		nameText.text = infos["name"];
+		infoText.text = infos["text"];
+		investor.GetComponent<Investor> ().SetActive (infos);
+
+		if (temporaryButton != null)
+			Destroy (temporaryButton);
+		if (infos ["button"] == "CreatePhysicalTile") {
+			InstanciateObj (AttachableScripts.transform.FindChild ("CreatePTiles").gameObject, specialButton);
+		} 
+	}
+
+	public void InstanciateObj(GameObject toCopy, GameObject father){
+		temporaryButton = Instantiate (toCopy);
+		temporaryButton.transform.SetParent (father.transform);
+		temporaryButton.GetComponent<Transform> ().position = father.GetComponent<Transform> ().position;
 	}
 
 }

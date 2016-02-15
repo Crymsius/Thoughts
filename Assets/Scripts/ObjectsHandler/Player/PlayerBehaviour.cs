@@ -9,6 +9,7 @@ public class PlayerBehaviour : MonoBehaviour {
 
 	public GameObject investor;
 
+	public TimeHandler timer;
 	public AffResources printer;
 	public AffResources infoText;
 
@@ -46,6 +47,7 @@ public class PlayerBehaviour : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
+		timer = GameObject.Find ("TimeHandler").GetComponent<TimeHandler> ();
 		printer = GameObject.Find ("InfoResources").GetComponent<AffResources> ();
 		infoText = GameObject.Find ("InfoActions").GetComponent<AffResources> ();
 
@@ -80,17 +82,7 @@ public class PlayerBehaviour : MonoBehaviour {
 	}
 
 	public void Wait(){
-		time ++;
-		ReflexionPoints += RPperTime;
-
-		if (etherDiscovered) {
-			foreach (GameObject caseObj in myRoad) 
-				StartCoroutine (caseObj.GetComponentInChildren<EtherScript2> ().MAJ ());
-			Ether -= (int)Mathf.Floor (Random.Range ( 0.75f * Ether * etherEvapRate ,1.25f * Ether * etherEvapRate));
-		}
-
-		MAJResources ();
-		investor.GetComponent<Investor> ().MAJ ();
+		timer.Wait ();
 	}
 
 	public void MAJResources(){

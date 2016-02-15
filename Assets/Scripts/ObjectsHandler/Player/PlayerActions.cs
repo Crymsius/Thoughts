@@ -37,10 +37,13 @@ public class PlayerActions : MonoBehaviour {
 			newBridge.GetComponent<PositionHandler> ().myGridHandler = 
 				GameObject.Find ("Grid").GetComponent<GridClass> ();
 			newBridge.GetComponent<PositionHandler> ().SetEtherealPosition (playerStats.etherealPosition);
+			newBridge.GetComponent<Bridge> ().location = "ethereal";
+			GameObject.Find ("TimeHandler").GetComponent<TimeHandler> ().allBridges.Add (newBridge.GetComponent<Bridge> ());
 		} else {
 			newBridge.GetComponent<PositionHandler> ().myGridHandler = 
 				GameObject.Find ("RealGrid").GetComponent<GridClass> ();
 			newBridge.GetComponent<PositionHandler> ().SetPhysicalPosition (playerStats.physicalPosition);
+			newBridge.GetComponent<Bridge> ().location = "physical";
 		}
 		return newBridge.GetComponent<Bridge> ();
 	}

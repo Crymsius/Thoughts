@@ -5,9 +5,14 @@ using System.Collections.Generic;
 public class GridClass : MonoBehaviour{
 
 	protected Dictionary<int, Dictionary<int, GameObject>> cases { get; set; }
+	public List<GameObject> availableCases { get; set; }
 
 	void Awake(){
 		cases = new Dictionary<int, Dictionary<int, GameObject>>();
+	}
+
+	void Start(){
+		availableCases = new List<GameObject>();
 	}
 
 	public void SetCase(GameObject aCase, int X, int Z){

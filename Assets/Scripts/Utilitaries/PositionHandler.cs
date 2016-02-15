@@ -34,4 +34,7 @@ public class PositionHandler : MonoBehaviour {
 		myObject.transform.parent = myGridHandler.GetCase ((int)pos.x, (int)pos.z).transform;
 		myGridHandler.GetCase ((int)pos.x, (int)pos.z).GetComponent<RealCase> ().attachedObject = myObject;
 	}
+
+	public void SetCameraPosition(Vector3 pos){
+	}
 }
