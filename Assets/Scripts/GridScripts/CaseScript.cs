@@ -26,7 +26,6 @@ public class CaseScript : MonoBehaviour {
 
 	private Transform posPlayer;
 	private Transform myPos;
-	public bool fini = false;
 
 	// public string state { get; set;}
 	private bool notExpanded = true;
@@ -37,7 +36,7 @@ public class CaseScript : MonoBehaviour {
 		posPlayer = (Transform)player.GetComponent<Transform> ();
 		myPos = (Transform)GetComponent<Transform> ();
 
-		animator = GetComponent<Animator>();
+		animator = gameObject.GetComponent<Animator>();
 
 		grid = GameObject.Find ("Grid").GetComponent<GridClass> ();
 		if (grid.Exists ((int)myPos.position.x / 10, (int)myPos.position.z / 10))
